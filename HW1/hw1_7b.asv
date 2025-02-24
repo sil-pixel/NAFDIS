@@ -1,0 +1,36 @@
+A = readImages('roundabout_snapshots');
+k = 5;
+s = 15;
+
+tic; randomSvd(A, k, s); toc;
+%disp(['Elapsed time for s=15: ',num2str(elapsed)]);
+
+tic; gsceb(A, @greedyidx, k); toc;
+
+P=3;
+
+T1=zeros(1,P);
+T2=zeros(1,P);
+
+for p=1:P
+    for k=1:length(tols)
+        tol=tols(k);
+
+        % Method one
+        tic
+        svd(A,0);
+        T1(k,p)=toc;
+
+        % Method two
+        tic
+        svdapprox(A, tol);
+        T2(k,p)=toc;
+    end
+end
+
+disp(['Tolerance levels: ', num2str(tols)])
+disp(['Naive SVD:        ', num2str(t1')])
+disp(['Partial SVD:      ', num2str(t2')])
+
+t1=mean(T1,2); % Plot the mean of the runs
+t2=mean(T2,2);

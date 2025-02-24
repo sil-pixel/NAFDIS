@@ -1,0 +1,27 @@
+load('zalando_items.mat');
+A = item3;
+
+[U,S,V] = svd(A);
+[C,Z] = ID_col(A,784);
+
+%zalando_plot(C(:,1));
+
+f = figure('Visible','on');
+
+imageSize=28;
+imageCount = 3;
+
+for i = 1:imageCount
+    z = C(:,i);
+    img = reshape(z,imageSize,imageSize);
+    [~,I]=max(abs(z));
+    za=z(I);
+    img=img/za;
+    B=1-img';
+
+    
+    subplot(3,2,i);
+    imshow(img);
+    drawnow;
+end
+%saveas(f, [mfilename,'.png']);
